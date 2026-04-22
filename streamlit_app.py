@@ -48,17 +48,21 @@ with st.sidebar:
     
     story_style = st.selectbox("Story Style", list(SUPPORTED_STORY_STYLES), index=0)
     
-    theme = st.text_input("Theme", placeholder="e.g., A magical space adventure")
-    
-    moral_type = st.text_input("Moral Type", placeholder="e.g., bravery, kindness", value="kindness")
-    
     generate_btn = st.button("✨ Generate Story", use_container_width=True, type="primary")
 
 if generate_btn:
-    if not theme:
-        st.error("Please enter a theme for the story!")
-    else:
-        with st.spinner("✍️ Generating your story... This might take a minute."):
+    import random
+    auto_themes = [
+        "A magical forest adventure",
+        "A friendly dragon learning a new skill",
+        "A space explorer discovering a new planet",
+        "Talking animals solving a mystery",
+        "A brave little robot's journey"
+    ]
+    theme = random.choice(auto_themes)
+    moral_type = "kindness"
+    
+    with st.spinner("✍️ Generating your story... This might take a minute."):
             try:
                 story_data = asyncio.run(generator.generate_story(
                     age_group=age_group,
