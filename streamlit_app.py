@@ -2,6 +2,12 @@ import sys
 import os
 import asyncio
 import streamlit as st
+
+# Ensure root directory is in sys.path so 'backend' can be imported on Streamlit Cloud
+root_dir = os.path.dirname(os.path.abspath(__file__))
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+
 from dotenv import load_dotenv
 
 # Load env vars
