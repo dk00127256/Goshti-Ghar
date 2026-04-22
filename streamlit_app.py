@@ -2,22 +2,16 @@ import sys
 import os
 import asyncio
 import streamlit as st
-
-# Ensure backend can be imported as "app.*"
-backend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "backend"))
-if backend_dir not in sys.path:
-    sys.path.insert(0, backend_dir)
-
 from dotenv import load_dotenv
 
 # Load env vars
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
-load_dotenv(os.path.join(backend_dir, ".env"))
+load_dotenv(os.path.join(os.path.dirname(__file__), "backend", ".env"))
 
-from app.services.story_store import StoryStore
-from app.services.story_gen import StoryGenerator
-from app.services.tts_service import StoryTTSService
-from app.models.story import SUPPORTED_AGE_GROUPS, SUPPORTED_LANGUAGES, SUPPORTED_STORY_STYLES
+from backend.app.services.story_store import StoryStore
+from backend.app.services.story_gen import StoryGenerator
+from backend.app.services.tts_service import StoryTTSService
+from backend.app.models.story import SUPPORTED_AGE_GROUPS, SUPPORTED_LANGUAGES, SUPPORTED_STORY_STYLES
 
 st.set_page_config(page_title="Goshti Ghar", page_icon="📚", layout="centered")
 
