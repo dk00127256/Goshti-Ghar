@@ -3,6 +3,12 @@ import random
 from typing import List, Optional
 
 from fastapi import FastAPI, HTTPException
+import re
+
+def validate_story_id(story_id: str):
+    if not re.match(r'^[a-zA-Z0-9_-]+$', story_id):
+        raise HTTPException(status_code=422, detail='Invalid story ID format')
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
@@ -16,9 +22,24 @@ CURRENT_LIBRARY_VERSION = "curated-library-v1"
 
 app = FastAPI(title="Goshti Ghar API", version="2.1.0")
 
+from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
+
+allowed_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -199,6 +220,7 @@ async def get_random_story(
 
 @app.get("/api/stories/{story_id}", response_model=StoryResponse)
 async def get_story(story_id: str):
+    validate_story_id(story_id)
     story = story_store.get_story(story_id)
     if not story:
         raise HTTPException(status_code=404, detail="Story not found")
@@ -207,6 +229,7 @@ async def get_story(story_id: str):
 
 @app.post("/api/stories/{story_id}/audio", response_model=StoryResponse)
 async def prepare_story_audio(story_id: str, force: bool = False):
+    validate_story_id(story_id)
     story = story_store.get_story(story_id)
     if not story:
         raise HTTPException(status_code=404, detail="Story not found")

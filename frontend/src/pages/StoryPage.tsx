@@ -79,6 +79,16 @@ export const StoryPage: React.FC = () => {
     if (id) {
       void fetchStory(id);
     }
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.removeAttribute('src');
+        audioRef.current.load();
+      }
+    };
   }, [fetchStory, id]);
 
   const prepareNarration = async (storyId: string, force = false) => {
@@ -332,7 +342,7 @@ export const StoryPage: React.FC = () => {
 
             {story.audio_url ? (
               <div className="space-y-4">
-                <audio key={story.audio_url} ref={audioRef} controls className="w-full" preload="metadata">
+                <audio key={story.id} ref={audioRef} controls className="w-full" preload="metadata">
                   <source src={story.audio_url.startsWith('http') ? story.audio_url : apiUrl(story.audio_url)} type="audio/wav" />
                 </audio>
                 <p className="text-sm leading-6 text-slate-600">
