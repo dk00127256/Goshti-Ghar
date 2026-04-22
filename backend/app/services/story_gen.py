@@ -265,7 +265,7 @@ class StoryGenerator:
                 return False
         return True
 
-def curated_seed_plan(self) -> List[Dict[str, Any]]:
+    def curated_seed_plan(self) -> List[Dict[str, Any]]:
         return [
             {"age_group": "2-4", "theme": "the moonboat that carried lullabies", "moral_type": "kindness", "language": "en", "story_style": "bedtime", "duration_minutes": 15},
             {"age_group": "2-4", "theme": "the upside-down pajama parade", "moral_type": "friendship", "language": "en", "story_style": "funny", "duration_minutes": 20},

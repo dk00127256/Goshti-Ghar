@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# Node
+node_modules/
+build/
+dist/
+npm-debug.log*
+
+# Mac
+.DS_Store
+
+# App Data
+media/audio/
+media/videos/
+backend/data/
+*.sqlite3
+
+# Streamlit
+.streamlit/
+backend/temp_*
