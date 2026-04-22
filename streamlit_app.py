@@ -63,43 +63,43 @@ if generate_btn:
     moral_type = "kindness"
     
     with st.spinner("✍️ Generating your story... This might take a minute."):
-            try:
-                story_data = asyncio.run(generator.generate_story(
-                    age_group=age_group,
-                    theme=theme,
-                    moral_type=moral_type,
-                    language=language,
-                    story_style=story_style,
-                    duration_minutes=15
-                ))
-                st.success("Story Generated!")
-            except Exception as e:
-                st.error(f"Failed to generate story: {e}")
-                st.stop()
-                
-        with st.spinner("🎧 Generating audio narration..."):
-            try:
-                audio_path = f"media/audio/{story_data['id']}.wav"
-                _, used_quality = asyncio.run(tts.text_to_speech(
-                    text=story_data["content"],
-                    output_path=audio_path,
-                    language=language,
-                    duration_minutes=15,
-                    story_style=story_style,
-                    allow_fallback=True
-                ))
-                
-                # Store data
-                story_data["audio_path"] = audio_path
-                story_data["audio_url"] = f"/audio/{story_data['id']}.wav"
-                story_data["audio_quality"] = used_quality
-                store.save_story(story_data)
-                
-            except Exception as e:
-                st.warning(f"Audio narration skipped or failed: {e}")
+        try:
+            story_data = asyncio.run(generator.generate_story(
+                age_group=age_group,
+                theme=theme,
+                moral_type=moral_type,
+                language=language,
+                story_style=story_style,
+                duration_minutes=15
+            ))
+            st.success("Story Generated!")
+        except Exception as e:
+            st.error(f"Failed to generate story: {e}")
+            st.stop()
+            
+    with st.spinner("🎧 Generating audio narration..."):
+        try:
+            audio_path = f"media/audio/{story_data['id']}.wav"
+            _, used_quality = asyncio.run(tts.text_to_speech(
+                text=story_data["content"],
+                output_path=audio_path,
+                language=language,
+                duration_minutes=15,
+                story_style=story_style,
+                allow_fallback=True
+            ))
+            
+            # Store data
+            story_data["audio_path"] = audio_path
+            story_data["audio_url"] = f"/audio/{story_data['id']}.wav"
+            story_data["audio_quality"] = used_quality
+            store.save_story(story_data)
+            
+        except Exception as e:
+            st.warning(f"Audio narration skipped or failed: {e}")
 
-        # Add to session state so it displays immediately
-        st.session_state["current_story"] = story_data
+    # Add to session state so it displays immediately
+    st.session_state["current_story"] = story_data
 
 # Display current generated story or library
 if "current_story" in st.session_state:
