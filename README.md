@@ -17,7 +17,7 @@ Use a fresh virtual environment. The checked-in `backend/venv` may contain packa
 ### 1. Backend
 
 ```bash
-cd "/Users/dk00127256/Documents/DJ Innovation projects/Ghosti-Ghar/backend"
+cd backend
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -37,7 +37,7 @@ Notes:
 ### 2. Frontend
 
 ```bash
-cd "/Users/dk00127256/Documents/DJ Innovation projects/Ghosti-Ghar/frontend"
+cd frontend
 npm install
 npm start
 ```
@@ -59,7 +59,7 @@ python3 -m http.server 3000 -d build
 Regenerate narration for the full story library:
 
 ```bash
-cd "/Users/dk00127256/Documents/DJ Innovation projects/Ghosti-Ghar/backend"
+cd backend
 ./.venv/bin/python scripts/regenerate_audio_library.py
 ```
 
